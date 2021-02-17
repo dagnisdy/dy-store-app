@@ -3,7 +3,7 @@
  ***/
 
 import React from 'react';
-import { Image, TouchableOpacity } from 'react-native';
+import { Image, TouchableOpacity, NativeModules, Platform } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 
@@ -21,10 +21,17 @@ const theme = {
     border: 'transparent'
   }
 };
-
 const Stack = createStackNavigator();
+const DYReact = NativeModules.DYReact;
 
 const App = () => {
+  const [dyState, setDyState] = React.useState({ image_containers: [], DYReturned: false });
+  const secretKey = Platform.OS === 'ios' ? '134eeb7a94fea0edb30aff21' : '01073533e5d214f5fcce0165';
+
+  DYReact.setSecret(secretKey, (dyState) => {
+    console.log(`returned with state: ${dyState} `);
+  });
+
   return (
     <NavigationContainer theme={theme}>
       <Stack.Navigator initialRouteName={'Home'}>
@@ -53,10 +60,7 @@ const App = () => {
               </TouchableOpacity>
             ),
             headerRight: () => (
-              <TouchableOpacity
-                style={{ marginRight: SIZES.padding }}
-                onPress={() => console.log('Pressed')}
-              >
+              <TouchableOpacity style={{ marginRight: SIZES.padding }} onPress={() => console.log('Pressed')}>
                 <Image
                   source={icons.search}
                   resizeMode="contain"
