@@ -1,5 +1,5 @@
 /***
- * Sample React Native DY App
+ * React Native Store DY App
  ***/
 
 import React from 'react';
